@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:chat/Api/apis.dart';
+import 'package:chat/Screen/ProfileScreen.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: [
             IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => ProfileScreen(
+                                user: list[0],
+                              )));
+                },
+                icon: const Icon(Icons.more_vert))
           ],
         ),
         floatingActionButton: FloatingActionButton(
