@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Api/apis.dart';
+import 'package:chat/Screen/auth/Login_screen.dart';
+import 'package:chat/helper/dailogs.dart';
 import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,12 +30,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await Api.auth.signOut();
-          await GoogleSignIn().signOut();
+          Dialogs.showProgressBar(context);
+          await Api.auth.signOut().then((value) async {
+            await GoogleSignIn().signOut().then((value) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (_) => LoginScreen()));
+            });
+          });
         },
-        icon: Icon(Icons.logout),
+        icon: const Icon(Icons.logout),
         backgroundColor: Colors.orange,
-        label: Text("Logout"),
+        label: const Text("Logout"),
       ),
       body: Container(
         child: Padding(
@@ -41,25 +50,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             children: [
               Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(mq.height * .3),
-                  child: CachedNetworkImage(
-                    width: mq.height * .2,
-                    height: mq.height * .2,
-                    fit: BoxFit.cover,
-                    imageUrl: widget.user.image,
-                    // placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        CircleAvatar(child: Icon(CupertinoIcons.person)),
-                  ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(mq.height * .3),
+                      child: CachedNetworkImage(
+                        width: mq.height * .2,
+                        height: mq.height * .2,
+                        fit: BoxFit.cover,
+                        imageUrl: widget.user.image,
+                        // placeholder: (context, url) => CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const CircleAvatar(
+                                child: Icon(CupertinoIcons.person)),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: MaterialButton(
+                        onPressed: () {},
+                        shape: CircleBorder(),
+                        color: Colors.white,
+                        child: Icon(
+                          Icons.edit_rounded,
+                          color: Colors.purple,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Text(
                 widget.user.email,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
               SizedBox(
                 height: mq.height * .05,
@@ -68,8 +95,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   initialValue: widget.user.name,
                   decoration: InputDecoration(
                     hintText: "Enter your name",
-                    label: Text("Name"),
-                    prefixIcon: Icon(Icons.person),
+                    label: const Text("Name"),
+                    prefixIcon: const Icon(Icons.person),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -81,8 +108,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   initialValue: widget.user.about,
                   decoration: InputDecoration(
                     hintText: "How are you Feeling",
-                    label: Text("About"),
-                    prefixIcon: Icon(Icons.person),
+                    label: const Text("About"),
+                    prefixIcon: const Icon(Icons.person),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -92,11 +119,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
+                    shape: const StadiumBorder(),
                     minimumSize: Size(mq.width * 0.6, mq.height * 0.055)),
                 onPressed: () {},
-                icon: Icon(Icons.update),
-                label: Text("Update"),
+                icon: const Icon(Icons.update),
+                label: const Text("Update"),
               )
             ],
           ),
