@@ -23,6 +23,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final _textController = TextEditingController();
+  List<Message> _list = [];
 
   bool _showEmoji = false, _isUploading = false;
   @override
@@ -46,23 +47,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 //if some or all data is loaded then show it
                 case ConnectionState.active:
                 case ConnectionState.done:
-                  final data = snapshot.data?.docs;
-                  log('Data:${jsonEncode(data![0].data())}');
-                  final _list = ['hi', 'hello'];
-                  // _list.add(Message(
-                  //     toid: 'xyz',
-                  //     msg: 'hi',
-                  //     read: "",
-                  //     type: Type.text,
-                  //     fromid: Api.user.uid,
-                  //     sent: '12:00 AM'));
-                  // _list.add(Message(
-                  //     toid: Api.user.uid,
-                  //     msg: 'hello',
-                  //     read: "",
-                  //     type: Type.text,
-                  //     fromid: 'xyz',
-                  //     sent: '12:00 AM'));
+                  _list.clear();
+                  _list.add(Message(
+                      toid: 'xyz',
+                      msg: 'hi',
+                      read: "",
+                      type: Type.text,
+                      fromid: Api.user.uid,
+                      sent: '12:00 AM'));
+                  _list.add(Message(
+                      toid: Api.user.uid,
+                      msg: 'hello',
+                      read: "",
+                      type: Type.text,
+                      fromid: 'xyz',
+                      sent: '12:50 AM'));
                   if (_list.isNotEmpty) {
                     return ListView.builder(
                         physics: const BouncingScrollPhysics(),
@@ -75,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           // return MessageCard(
                           //   message: _list[index],
                           // );
-                          return Text('Message${_list[index]}');
+                          return MessageCard(message: _list[index]);
                         });
                   } else {
                     return Center(
