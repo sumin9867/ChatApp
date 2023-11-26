@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount:
                               _isSearching ? _searchlsit.length : list.length,
                           itemBuilder: (context, index) {
-                            return UserCard(
+                            return ChatUserCard(
                               user: _isSearching
                                   ? _searchlsit[index]
                                   : list[index],

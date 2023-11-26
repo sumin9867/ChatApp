@@ -1,18 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat/Screen/chat_screen.dart';
 import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class UserCard extends StatefulWidget {
-  const UserCard({super.key, required this.user});
+class ChatUserCard extends StatefulWidget {
+  const ChatUserCard({super.key, required this.user});
   final ChatUser user;
 
   @override
-  State<UserCard> createState() => _UserCardState();
+  State<ChatUserCard> createState() => _UserCardState();
 }
 
-class _UserCardState extends State<UserCard> {
+class _UserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,7 +22,14 @@ class _UserCardState extends State<UserCard> {
       elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ChatScreen(
+                          user: widget.user,
+                        )));
+          },
           child: ListTile(
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(mq.height * .3),
