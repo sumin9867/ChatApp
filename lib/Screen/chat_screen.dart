@@ -1,11 +1,17 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Api/apis.dart';
+import 'package:chat/Screen/view_profile_screen.dart';
 import 'package:chat/Widgets/messagecard.dart';
+import 'package:chat/helper/MyDataUtil.dart';
 import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:chat/model/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key, required this.user});
@@ -19,8 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _textController = TextEditingController();
   List<Message> _list = [];
 
-  bool _showEmoji = false;
-  // _isUploading = false;
+  bool _showEmoji = false, _isUploading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   if (_list.isNotEmpty) {
                     return ListView.builder(
+                        reverse: true,
                         physics: const BouncingScrollPhysics(),
                         itemCount: _list.length,
                         itemBuilder: (context, index) {
@@ -72,6 +78,14 @@ class _ChatScreenState extends State<ChatScreen> {
             },
           ),
         ),
+        if (_isUploading)
+          Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                child: CircularProgressIndicator(),
+              )),
         _chatInput()
       ]),
     );
@@ -81,10 +95,10 @@ class _ChatScreenState extends State<ChatScreen> {
     return SafeArea(
       child: InkWell(
           onTap: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (_) => ViewProfileScreen(user: widget.user)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ViewProfileScreen(user: widget.user)));
           },
           child: StreamBuilder(
               stream: Api.getUserInfo(widget.user),
@@ -133,20 +147,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
                         //for adding some space
                         const SizedBox(height: 2),
-                        Text('LAst Seen moment')
 
-                        // Text(
-                        //     list.isNotEmpty
-                        //         ? list[0].isOnline
-                        //             ? 'Online'
-                        //             : MyDateUtil.getLastActiveTime(
-                        //                 context: context,
-                        //                 lastActive: list[0].lastActive)
-                        //         : MyDateUtil.getLastActiveTime(
-                        //             context: context,
-                        //             lastActive: widget.user.lastActive),
-                        //     style: const TextStyle(
-                        //         fontSize: 13, color: Colors.black54)),
+                        Text(
+                            list.isNotEmpty
+                                ? list[0].isOnline
+                                    ? 'Online'
+                                    : MyDateUtil.getLastActiveTime(
+                                        context: context,
+                                        lastActive: list[0].lastActive)
+                                : MyDateUtil.getLastActiveTime(
+                                    context: context,
+                                    lastActive: widget.user.lastActive),
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.black54)),
                       ],
                     )
                   ],
@@ -194,40 +207,37 @@ class _ChatScreenState extends State<ChatScreen> {
                   //pick image from gallery button
                   IconButton(
                       onPressed: () async {
-                        //   final ImagePicker picker = ImagePicker();
+                        final ImagePicker picker = ImagePicker();
 
-                        //   // Picking multiple images
-                        //   final List<XFile> images =
-                        //       await picker.pickMultiImage(imageQuality: 70);
+                        // Picking multiple images
+                        final List<XFile> images =
+                            await picker.pickMultiImage(imageQuality: 70);
 
-                        //   // uploading & sending image one by one
-                        //   for (var i in images) {
-                        //     log('Image Path: ${i.path}');
-                        //     setState(() => _isUploading = true);
-                        //     await Api.sendChatImage(widget.user, File(i.path));
-                        //     setState(() => _isUploading = false);
-                        //   }
-                        // },
+                        // uploading & sending image one by one
+                        for (var i in images) {
+                          setState(() => _isUploading = true);
+                          await Api.sendChatImage(widget.user, File(i.path));
+                          setState(() => _isUploading = false);
+                        }
                       },
                       icon: const Icon(Icons.image,
                           color: Colors.blueAccent, size: 26)),
 
                   //take image from camera button
                   IconButton(
-                      onPressed: () {
-                        // final ImagePicker picker = ImagePicker();
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
 
-                        // // Pick an image
-                        // final XFile? image = await picker.pickImage(
-                        //     source: ImageSource.camera, imageQuality: 70);
-                        // if (image != null) {
-                        //   log('Image Path: ${image.path}');
-                        //   setState(() => _isUploading = true);
+                        // Pick an image
+                        final XFile? image = await picker.pickImage(
+                            source: ImageSource.camera, imageQuality: 70);
+                        if (image != null) {
+                          setState(() => _isUploading = true);
 
-                        //   await Api.sendChatImage(
-                        //       widget.user, File(image.path));
-                        //   setState(() => _isUploading = false);
-                        // }
+                          await Api.sendChatImage(
+                              widget.user, File(image.path));
+                          setState(() => _isUploading = false);
+                        }
                       },
                       icon: const Icon(Icons.camera_alt_rounded,
                           color: Colors.blueAccent, size: 26)),
@@ -243,15 +253,11 @@ class _ChatScreenState extends State<ChatScreen> {
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                if (_list.isEmpty) {
-                  //on first message (add user to my_user collection of chat user)
+                //on first message (add user to my_user collection of chat user)
 
-                  //simply send message
-                  Api.sendMessages(
-                    widget.user,
-                    _textController.text,
-                  );
-                }
+                //simply send message
+                Api.sendMessage(widget.user, _textController.text, Type.text);
+
                 _textController.text = '';
               }
             },

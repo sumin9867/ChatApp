@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/ProfileScreen.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,6 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Api.getSelfInfo();
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (Api.auth.currentUser != null) {
+        if (message.toString().contains("pause")) {
+          Api.updateActiveStatus(false);
+        }
+        if (message.toString().contains("resume")) {
+          Api.updateActiveStatus(true);
+        }
+      }
+
+      return Future.value(message);
+    });
   }
 
   @override
