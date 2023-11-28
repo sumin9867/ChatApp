@@ -1,4 +1,3 @@
-import 'package:chat/Screen/HomeScreen.dart';
 import 'package:chat/Screen/splash.dart';
 import 'package:chat/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }

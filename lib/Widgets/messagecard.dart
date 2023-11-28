@@ -1,8 +1,7 @@
 import 'package:chat/Api/apis.dart';
+import 'package:chat/helper/MyDataUtil.dart';
 import 'package:chat/main.dart';
 import 'package:chat/model/message.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MessageCard extends StatefulWidget {
@@ -19,10 +18,12 @@ class _MessageCardState extends State<MessageCard> {
     return Api.user.uid == widget.message.fromid
         ? _greenMessage()
         : _blueMessage();
-    ;
   }
 
   Widget _blueMessage() {
+    if (widget.message.read.isEmpty) {
+      Api.updateMessageReadStatus(widget.message);
+    }
     return Flexible(
       child: Row(
         children: [
@@ -34,7 +35,7 @@ class _MessageCardState extends State<MessageCard> {
             decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 117, 179, 230),
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
+                    topLeft: const Radius.circular(30),
                     topRight: Radius.circular(30),
                     bottomRight: Radius.circular(30))),
             child: Row(
@@ -47,7 +48,10 @@ class _MessageCardState extends State<MessageCard> {
                   padding: EdgeInsets.only(
                       right: mq.width * .01, left: mq.width * .03),
                   child: Text(
-                    widget.message.read + "12:50",
+                    MyDateUtil.getFormattedTime(
+                      context: context,
+                      time: widget.message.sent,
+                    ),
                     style: TextStyle(fontSize: 13),
                   ),
                 ),
@@ -89,14 +93,18 @@ class _MessageCardState extends State<MessageCard> {
                   padding: EdgeInsets.only(
                       right: mq.width * .01, left: mq.width * .03),
                   child: Text(
-                    widget.message.sent,
+                    MyDateUtil.getFormattedTime(
+                      context: context,
+                      time: widget.message.sent,
+                    ),
                     style: TextStyle(fontSize: 13),
                   ),
                 ),
-                Icon(
-                  Icons.done_all_rounded,
-                  size: 15,
-                ),
+                if (widget.message.read.isNotEmpty)
+                  Icon(
+                    Icons.done_all_rounded,
+                    size: 15,
+                  ),
               ],
             ),
           ),

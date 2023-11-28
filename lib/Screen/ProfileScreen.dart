@@ -1,11 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/auth/Login_screen.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,21 +36,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "We Chat",
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            Dialogs.showProgressBar(context);
-            await Api.auth.signOut().then((value) async {
-              await GoogleSignIn().signOut().then((value) {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (_) => LoginScreen()));
-              });
-            });
-          },
-          icon: const Icon(Icons.logout),
-          backgroundColor: Colors.orange,
-          label: const Text("Logout"),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: FloatingActionButton.extended(
+              backgroundColor: Colors.redAccent,
+              onPressed: () async {
+                //for showing progress dialog
+                Dialogs.showProgressBar(context);
+
+                // await Api.updateActiveStatus(false);
+
+                //sign out from app
+                await Api.auth.signOut().then((value) async {
+                  await GoogleSignIn().signOut().then((value) {
+                    //for hiding progress dialog
+                    Navigator.pop(context);
+
+                    //for moving to home screen
+                    Navigator.pop(context);
+
+                    Api.auth = FirebaseAuth.instance;
+
+                    //replacing home screen with login screen
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (_) => const LoginScreen()));
+                  });
+                });
+              },
+              icon: const Icon(Icons.logout),
+              label: const Text('Logout')),
         ),
         body: Form(
           key: _formKey,
@@ -94,9 +110,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onPressed: () {
                               _showButtomSheet();
                             },
-                            shape: CircleBorder(),
+                            shape: const CircleBorder(),
                             color: Colors.white,
-                            child: Icon(
+                            child: const Icon(
                               Icons.edit_rounded,
                               color: Colors.purple,
                             ),
@@ -179,7 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _showButtomSheet() {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         context: context,
@@ -189,7 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding:
                 EdgeInsets.only(top: mq.height * .03, bottom: mq.height * .05),
             children: [
-              Text(
+              const Text(
                 'Pick your DP',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),

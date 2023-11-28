@@ -1,9 +1,4 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Widgets/messagecard.dart';
 import 'package:chat/main.dart';
@@ -11,7 +6,6 @@ import 'package:chat/model/chatusermodel.dart';
 import 'package:chat/model/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key, required this.user});
@@ -25,7 +19,8 @@ class _ChatScreenState extends State<ChatScreen> {
   final _textController = TextEditingController();
   List<Message> _list = [];
 
-  bool _showEmoji = false, _isUploading = false;
+  bool _showEmoji = false;
+  // _isUploading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(children: [
         Expanded(
           child: StreamBuilder(
-            stream: Api.getAllMessages(),
+            stream: Api.getAllMessages(widget.user),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 //if data is loading
@@ -47,21 +42,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 //if some or all data is loaded then show it
                 case ConnectionState.active:
                 case ConnectionState.done:
-                  _list.clear();
-                  _list.add(Message(
-                      toid: 'xyz',
-                      msg: 'hi',
-                      read: "",
-                      type: Type.text,
-                      fromid: Api.user.uid,
-                      sent: '12:00 AM'));
-                  _list.add(Message(
-                      toid: Api.user.uid,
-                      msg: 'hello',
-                      read: "",
-                      type: Type.text,
-                      fromid: 'xyz',
-                      sent: '12:50 AM'));
+                  final data = snapshot.data?.docs;
+                  _list =
+                      data?.map((e) => Message.fromJson(e.data())).toList() ??
+                          [];
+
                   if (_list.isNotEmpty) {
                     return ListView.builder(
                         physics: const BouncingScrollPhysics(),
@@ -257,18 +242,18 @@ class _ChatScreenState extends State<ChatScreen> {
           //send message button
           MaterialButton(
             onPressed: () {
-              // if (_textController.text.isNotEmpty) {
-              //   if (_list.isEmpty) {
-              //     //on first message (add user to my_user collection of chat user)
-              //     Api.sendFirstMessage(
-              //         widget.user, _textController.text, Type.text);
-              //   } else {
-              //     //simply send message
-              //     Api.sendMessage(
-              //         widget.user, _textController.text, Type.text);
-              //   }
-              //   _textController.text = '';
-              // }
+              if (_textController.text.isNotEmpty) {
+                if (_list.isEmpty) {
+                  //on first message (add user to my_user collection of chat user)
+
+                  //simply send message
+                  Api.sendMessages(
+                    widget.user,
+                    _textController.text,
+                  );
+                }
+                _textController.text = '';
+              }
             },
             minWidth: 0,
             padding:
