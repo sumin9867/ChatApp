@@ -22,8 +22,7 @@ class _UserCardState extends State<ChatUserCard> {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: mq.width * .04, vertical: 7),
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 0,
       child: InkWell(
         onTap: () {
           Navigator.push(

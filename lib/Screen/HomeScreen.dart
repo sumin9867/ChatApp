@@ -2,6 +2,7 @@ import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/ProfileScreen.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/helper/dailogs.dart';
+import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Scaffold(
             appBar: AppBar(
-              leading: const Icon(CupertinoIcons.home),
-              centerTitle: true,
+              leading: const Icon(
+                CupertinoIcons.chat_bubble_text,
+              ),
               title: _isSearching
                   ? TextFormField(
                       onChanged: (val) {
@@ -78,7 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: InputDecoration(
                           hintText: "Name,Email..", border: InputBorder.none))
                   : Text(
-                      "We Chat",
+                      "Gossip Fest",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
                     ),
               actions: [
                 IconButton(
@@ -87,9 +91,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         _isSearching = !_isSearching;
                       });
                     },
-                    icon: Icon(_isSearching
-                        ? CupertinoIcons.clear_circled_solid
-                        : Icons.search)),
+                    icon: Icon(
+                      _isSearching
+                          ? CupertinoIcons.clear_circled_solid
+                          : Icons.search_rounded,
+                    )),
                 IconButton(
                     onPressed: () {
                       Navigator.push(
@@ -99,72 +105,84 @@ class _HomeScreenState extends State<HomeScreen> {
                                     user: Api.me,
                                   )));
                     },
-                    icon: const Icon(Icons.more_vert))
+                    icon: const Icon(
+                      Icons.edit,
+                    ))
               ],
             ),
+
+            // try
+
+            // here
+
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
                 _addChatUserDialog();
               },
               child: const Icon(Icons.add_comment_rounded),
             ),
-            body: StreamBuilder(
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  //if data is loading
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
 
-                  //if some or all data is loaded then show it
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    return StreamBuilder(
-                      builder: (context, snapshot) {
-                        switch (snapshot.connectionState) {
-                          //if data is loading
-                          case ConnectionState.waiting:
-                          case ConnectionState.none:
-                            return const Center(
-                                child: CircularProgressIndicator());
+            body: Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: StreamBuilder(
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    //if data is loading
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
 
-                          //if some or all data is loaded then show it
-                          case ConnectionState.active:
-                          case ConnectionState.done:
-                            final data = snapshot.data?.docs;
-                            list = data
-                                    ?.map((e) => ChatUser.fromJson(e.data()))
-                                    .toList() ??
-                                [];
+                    //if some or all data is loaded then show it
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      return StreamBuilder(
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            //if data is loading
+                            case ConnectionState.waiting:
+                            case ConnectionState.none:
+                              return const Center(
+                                  child: CircularProgressIndicator());
 
-                            if (list.isNotEmpty) {
-                              return ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: _isSearching
-                                      ? _searchlsit.length
-                                      : list.length,
-                                  itemBuilder: (context, index) {
-                                    return ChatUserCard(
-                                      user: _isSearching
-                                          ? _searchlsit[index]
-                                          : list[index],
-                                    );
-                                    // return Text('Name;${list[index]}');
-                                  });
-                            } else {
-                              return Center(
-                                  child: Text(
-                                "No Connections Founnd",
-                                style: TextStyle(fontSize: 20),
-                              ));
-                            }
-                        }
-                      },
-                      stream: Api.getAllUsers(
-                          snapshot.data?.docs.map((e) => e.id).toList() ?? []),
-                    );
-                }
-              },
-              stream: Api.getMyUsersId(),
+                            //if some or all data is loaded then show it
+                            case ConnectionState.active:
+                            case ConnectionState.done:
+                              final data = snapshot.data?.docs;
+                              list = data
+                                      ?.map((e) => ChatUser.fromJson(e.data()))
+                                      .toList() ??
+                                  [];
+
+                              if (list.isNotEmpty) {
+                                return ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: _isSearching
+                                        ? _searchlsit.length
+                                        : list.length,
+                                    itemBuilder: (context, index) {
+                                      return ChatUserCard(
+                                        user: _isSearching
+                                            ? _searchlsit[index]
+                                            : list[index],
+                                      );
+                                      // return Text('Name;${list[index]}');
+                                    });
+                              } else {
+                                return Center(
+                                    child: Text(
+                                  "No Connections Founnd",
+                                  style: TextStyle(fontSize: 20),
+                                ));
+                              }
+                          }
+                        },
+                        stream: Api.getAllUsers(
+                            snapshot.data?.docs.map((e) => e.id).toList() ??
+                                []),
+                      );
+                  }
+                },
+                stream: Api.getMyUsersId(),
+              ),
             ),
           ),
         ));
