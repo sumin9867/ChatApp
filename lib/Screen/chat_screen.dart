@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/view_profile_screen.dart';
@@ -253,11 +251,15 @@ class _ChatScreenState extends State<ChatScreen> {
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                //on first message (add user to my_user collection of chat user)
+                if (_list.isEmpty) {
+                  Api.sendFirstMessage(
+                      widget.user, _textController.text, Type.text);
+                } else {
+                  //on first message (add user to my_user collection of chat user)
 
-                //simply send message
-                Api.sendMessage(widget.user, _textController.text, Type.text);
-
+                  //simply send message
+                  Api.sendMessage(widget.user, _textController.text, Type.text);
+                }
                 _textController.text = '';
               }
             },

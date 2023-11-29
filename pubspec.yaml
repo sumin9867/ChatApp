@@ -41,7 +41,7 @@ dependencies:
   emoji_picker_flutter: ^1.5.1
 
   # For accessing firebase messaging (Push Notification)
-  firebase_messaging: ^14.2.0
+  firebase_messaging: ^14.7.6
 
   # For calling RestAPIs
   http: ^0.13.5
@@ -51,6 +51,7 @@ dependencies:
 
   # For storing images into gallery
   gallery_saver: ^2.3.2
+  firebase_analytics: ^10.7.2
 
 
 dev_dependencies:
