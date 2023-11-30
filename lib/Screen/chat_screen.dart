@@ -169,107 +169,108 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _chatInput() {
     return Padding(
       padding: EdgeInsets.symmetric(
-          vertical: mq.height * .01, horizontal: mq.width * .025),
+          vertical: mq.height * .02, horizontal: mq.width * .025),
       child: Row(
         children: [
           //input field & buttons
           Expanded(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                children: [
-                  //emoji button
-                  IconButton(
+            child: SizedBox(
+              height: mq.height * .07,
+              child: Card(
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 40,
+                    ),
+                    Expanded(
+                        child: TextField(
+                      controller: _textController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      onTap: () {
+                        if (_showEmoji)
+                          setState(() => _showEmoji = !_showEmoji);
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'Type Something...',
+                          hintStyle: TextStyle(color: Colors.blueAccent),
+                          border: InputBorder.none),
+                    )),
+
+                    //pick image from gallery button
+                    IconButton(
+                        onPressed: () async {
+                          final ImagePicker picker = ImagePicker();
+
+                          // Picking multiple images
+                          final List<XFile> images =
+                              await picker.pickMultiImage(imageQuality: 70);
+
+                          // uploading & sending image one by one
+                          for (var i in images) {
+                            setState(() => _isUploading = true);
+                            await Api.sendChatImage(widget.user, File(i.path));
+                            setState(() => _isUploading = false);
+                          }
+                        },
+                        icon: const Icon(Icons.image,
+                            color: Colors.blueAccent, size: 26)),
+
+                    //take image from camera button
+                    IconButton(
+                        onPressed: () async {
+                          final ImagePicker picker = ImagePicker();
+
+                          // Pick an image
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.camera, imageQuality: 70);
+                          if (image != null) {
+                            setState(() => _isUploading = true);
+
+                            await Api.sendChatImage(
+                                widget.user, File(image.path));
+                            setState(() => _isUploading = false);
+                          }
+                        },
+                        icon: const Icon(Icons.camera_alt_rounded,
+                            color: Colors.blueAccent, size: 26)),
+
+                    //adding some space
+                    SizedBox(width: mq.width * .02),
+                    MaterialButton(
                       onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        setState(() => _showEmoji = !_showEmoji);
-                      },
-                      icon: const Icon(Icons.emoji_emotions,
-                          color: Colors.blueAccent, size: 25)),
+                        if (_textController.text.isNotEmpty) {
+                          if (_list.isEmpty) {
+                            Api.sendFirstMessage(
+                                widget.user, _textController.text, Type.text);
+                          } else {
+                            //on first message (add user to my_user collection of chat user)
 
-                  Expanded(
-                      child: TextField(
-                    controller: _textController,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    onTap: () {
-                      if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
-                    },
-                    decoration: const InputDecoration(
-                        hintText: 'Type Something...',
-                        hintStyle: TextStyle(color: Colors.blueAccent),
-                        border: InputBorder.none),
-                  )),
-
-                  //pick image from gallery button
-                  IconButton(
-                      onPressed: () async {
-                        final ImagePicker picker = ImagePicker();
-
-                        // Picking multiple images
-                        final List<XFile> images =
-                            await picker.pickMultiImage(imageQuality: 70);
-
-                        // uploading & sending image one by one
-                        for (var i in images) {
-                          setState(() => _isUploading = true);
-                          await Api.sendChatImage(widget.user, File(i.path));
-                          setState(() => _isUploading = false);
+                            //simply send message
+                            Api.sendMessage(
+                                widget.user, _textController.text, Type.text);
+                          }
+                          _textController.text = '';
                         }
                       },
-                      icon: const Icon(Icons.image,
-                          color: Colors.blueAccent, size: 26)),
-
-                  //take image from camera button
-                  IconButton(
-                      onPressed: () async {
-                        final ImagePicker picker = ImagePicker();
-
-                        // Pick an image
-                        final XFile? image = await picker.pickImage(
-                            source: ImageSource.camera, imageQuality: 70);
-                        if (image != null) {
-                          setState(() => _isUploading = true);
-
-                          await Api.sendChatImage(
-                              widget.user, File(image.path));
-                          setState(() => _isUploading = false);
-                        }
-                      },
-                      icon: const Icon(Icons.camera_alt_rounded,
-                          color: Colors.blueAccent, size: 26)),
-
-                  //adding some space
-                  SizedBox(width: mq.width * .02),
-                ],
+                      minWidth: 0,
+                      padding: const EdgeInsets.only(
+                          top: 12, bottom: 12, right: 7, left: 12),
+                      shape: const CircleBorder(),
+                      color: Color.fromARGB(255, 98, 108, 212),
+                      child: const Icon(Icons.send_rounded,
+                          color: Colors.white, size: 28),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
 
           //send message button
-          MaterialButton(
-            onPressed: () {
-              if (_textController.text.isNotEmpty) {
-                if (_list.isEmpty) {
-                  Api.sendFirstMessage(
-                      widget.user, _textController.text, Type.text);
-                } else {
-                  //on first message (add user to my_user collection of chat user)
-
-                  //simply send message
-                  Api.sendMessage(widget.user, _textController.text, Type.text);
-                }
-                _textController.text = '';
-              }
-            },
-            minWidth: 0,
-            padding:
-                const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
-            shape: const CircleBorder(),
-            color: Colors.green,
-            child: const Icon(Icons.send, color: Colors.white, size: 28),
-          )
         ],
       ),
     );

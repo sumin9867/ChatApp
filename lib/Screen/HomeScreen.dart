@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/ProfileScreen.dart';
+import 'package:chat/Screen/tst.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/main.dart';
@@ -94,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: Icon(
                       _isSearching
                           ? CupertinoIcons.clear_circled_solid
-                          : Icons.search_rounded,
+                          : Icons.search_outlined,
+                      size: 30,
                     )),
                 IconButton(
                     onPressed: () {
@@ -110,18 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ))
               ],
             ),
-
-            // try
-
-            // here
-
             floatingActionButton: FloatingActionButton(
+              autofocus: true,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              backgroundColor: const Color.fromARGB(255, 33, 93, 243),
               onPressed: () async {
                 _addChatUserDialog();
               },
-              child: const Icon(Icons.add_comment_rounded),
+              child: const Icon(
+                Icons.group_add_rounded,
+                color: Colors.white,
+              ),
             ),
-
             body: Padding(
               padding: const EdgeInsets.only(top: 12),
               child: StreamBuilder(

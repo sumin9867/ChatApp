@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: const Text(
-            "We Chat",
+            "Me",
           ),
         ),
         floatingActionButton: Padding(
@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               },
               icon: const Icon(Icons.logout),
-              label: const Text('Logout')),
+              label: const Text('Sign Out')),
         ),
         body: Form(
           key: _formKey,

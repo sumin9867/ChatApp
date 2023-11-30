@@ -47,17 +47,22 @@ class _UserCardState extends State<ChatUserCard> {
                     width: mq.height * .055,
                     height: mq.height * .055,
                     imageUrl: widget.user.image,
-                    // placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) =>
-                        CircleAvatar(child: Icon(CupertinoIcons.person)),
+                        const CircleAvatar(child: Icon(CupertinoIcons.person)),
                   ),
                 ),
-                title: Text(widget.user.name),
-                subtitle: Text(_message != null
-                    ? _message!.type == Type.image
-                        ? 'Sent a image'
-                        : _message!.msg
-                    : widget.user.about),
+                title: Text(
+                  widget.user.name,
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+                ),
+                subtitle: Text(
+                  _message != null
+                      ? _message!.type == Type.image
+                          ? 'Sent a image'
+                          : _message!.msg
+                      : widget.user.about,
+                  style: TextStyle(fontWeight: FontWeight.w400),
+                ),
                 trailing: _message == null
                     ? null
                     : _message!.read.isEmpty && _message!.fromid != Api.user.uid
@@ -68,8 +73,12 @@ class _UserCardState extends State<ChatUserCard> {
                                 color: Colors.green,
                                 borderRadius: BorderRadius.circular(7.5)),
                           )
-                        : Text(MyDateUtil.getLastMessageTime(
-                            context: context, time: _message!.sent)));
+                        : Text(
+                            MyDateUtil.getLastMessageTime(
+                                context: context, time: _message!.sent),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w400),
+                          ));
           },
           stream: Api.getLastMessage(widget.user),
         ),
