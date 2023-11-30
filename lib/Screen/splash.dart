@@ -1,5 +1,6 @@
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/HomeScreen.dart';
+import 'package:chat/Screen/naviagtion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,8 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (Api.auth.currentUser != null) {
         //navigate to home screen
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (_) => const NavigationExample()));
       } else {
         //navigate to login screen
         Navigator.pushReplacement(

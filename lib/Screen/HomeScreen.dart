@@ -100,18 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           : Icons.search_outlined,
                       size: 30,
                     )),
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => ProfileScreen(
-                                    user: Api.me,
-                                  )));
-                    },
-                    icon: const Icon(
-                      Icons.edit,
-                    ))
               ],
             ),
             floatingActionButton: FloatingActionButton(

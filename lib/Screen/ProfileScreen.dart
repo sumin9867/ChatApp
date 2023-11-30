@@ -31,9 +31,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
+          leading: BackButton(
+            color: Colors.black,
+          ),
           title: const Text(
             "Me",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
         ),
         floatingActionButton: Padding(

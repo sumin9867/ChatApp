@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/HomeScreen.dart';
+import 'package:chat/Screen/naviagtion.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,11 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         if ((await Api.userExists())) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => HomeScreen()));
+              context, MaterialPageRoute(builder: (_) => NavigationExample()));
         } else {
           await Api.createUser().then((value) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => HomeScreen()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => NavigationExample()));
           });
         }
       }
