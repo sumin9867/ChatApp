@@ -64,7 +64,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                     //replacing home screen with login screen
                     Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) => const LoginScreen()));
+                        MaterialPageRoute(builder: (_) => LoginScreen()));
                   });
                 });
               },

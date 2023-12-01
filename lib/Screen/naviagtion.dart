@@ -1,6 +1,5 @@
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/HomeScreen.dart';
-import 'package:chat/Screen/ProfileScreen.dart';
 import 'package:chat/Screen/myprofile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -25,7 +23,7 @@ class _NavigationExampleState extends State<NavigationExample> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.amber,
+        indicatorColor: Color.fromARGB(255, 7, 181, 255),
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
@@ -42,13 +40,6 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: <Widget>[
         HomeScreen(),
-
-        /// Home page
-
-        /// Notifications page
-
-        /// Messages page
-
         MyProfileScreen(user: Api.me),
       ][currentPageIndex],
     );

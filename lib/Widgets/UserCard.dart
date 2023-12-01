@@ -21,7 +21,7 @@ class _UserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: mq.width * .04, vertical: 7),
+      margin: EdgeInsets.symmetric(horizontal: mq.width * .02, vertical: 2),
       elevation: 0,
       child: InkWell(
         onTap: () {

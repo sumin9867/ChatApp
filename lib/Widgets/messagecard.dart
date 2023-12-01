@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Api/apis.dart';
 import 'package:chat/helper/MyDataUtil.dart';

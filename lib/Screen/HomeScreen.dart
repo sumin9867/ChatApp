@@ -1,16 +1,10 @@
-import 'dart:math';
-
 import 'package:chat/Api/apis.dart';
-import 'package:chat/Screen/ProfileScreen.dart';
-import 'package:chat/Screen/tst.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/helper/dailogs.dart';
-import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -59,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Scaffold(
             appBar: AppBar(
-              leading: const Icon(
-                CupertinoIcons.chat_bubble_text,
+              leading: new Image.asset(
+                "images/logo.png",
               ),
               title: _isSearching
                   ? TextFormField(
@@ -80,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         }
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           hintText: "Name,Email..", border: InputBorder.none))
                   : Text(
                       "Gossip Fest",

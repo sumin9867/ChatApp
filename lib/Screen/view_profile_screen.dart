@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chat/helper/MyDataUtil.dart';
-
 import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:flutter/cupertino.dart';

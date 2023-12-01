@@ -1,11 +1,8 @@
 import 'package:chat/Api/apis.dart';
-import 'package:chat/Screen/HomeScreen.dart';
 import 'package:chat/Screen/naviagtion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../../main.dart';
-
 import 'auth/login_screen.dart';
 
 //splash screen
@@ -45,24 +42,21 @@ class _SplashScreenState extends State<SplashScreen> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
-      //body
-      body: Stack(children: [
-        //app logo
-        Positioned(
-            top: mq.height * .15,
-            right: mq.width * .25,
-            width: mq.width * .5,
-            child: Image.asset('images/icon.png')),
-
-        //google login button
-        Positioned(
-            bottom: mq.height * .15,
-            width: mq.width,
-            child: const Text('MADE WITH ❤️',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 16, color: Colors.black87, letterSpacing: .5))),
-      ]),
-    );
+        //body
+        body: Column(
+      children: [
+        SizedBox(
+          height: 40,
+        ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Image.asset('images/splash.png'),
+        ),
+        SizedBox(
+          height: mq.height * .2,
+        ),
+        CircularProgressIndicator()
+      ],
+    ));
   }
 }
