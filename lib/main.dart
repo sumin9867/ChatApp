@@ -2,12 +2,14 @@ import 'package:chat/Screen/splash.dart';
 import 'package:chat/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 late Size mq;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   _initializeFirebase();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   runApp(const MyApp());
 }
 
