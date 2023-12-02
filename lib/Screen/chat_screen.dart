@@ -56,13 +56,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: _list.length,
                         itemBuilder: (context, index) {
-                          // return
-                          // ChatUserCard(
-                          //   user: _isSearching ? _searchlsit[index] : list[index],
-                          // );
-                          // return MessageCard(
-                          //   message: _list[index],
-                          // );
                           return MessageCard(message: _list[index]);
                         });
                   } else {

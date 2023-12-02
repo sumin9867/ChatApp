@@ -1,4 +1,5 @@
 import 'package:chat/Api/apis.dart';
+import 'package:chat/Screen/Friends/friends.dart';
 import 'package:chat/Screen/HomeScreen.dart';
 import 'package:chat/Screen/myprofile.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +24,7 @@ class _NavigationExampleState extends State<NavigationExample> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Color.fromARGB(255, 7, 181, 255),
+        indicatorColor: Color.fromARGB(255, 255, 255, 255),
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
@@ -33,6 +34,10 @@ class _NavigationExampleState extends State<NavigationExample> {
             label: 'Messages',
           ),
           NavigationDestination(
+            icon: Badge(child: Icon(Icons.group_outlined)),
+            label: 'Friend',
+          ),
+          NavigationDestination(
             icon: Badge(child: Icon(Icons.person)),
             label: 'Profile',
           ),
@@ -40,6 +45,7 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: <Widget>[
         HomeScreen(),
+        FriendsScreen(),
         MyProfileScreen(user: Api.me),
       ][currentPageIndex],
     );

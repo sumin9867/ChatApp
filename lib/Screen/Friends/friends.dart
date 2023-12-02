@@ -1,4 +1,5 @@
 import 'package:chat/Api/apis.dart';
+import 'package:chat/Screen/Friends/friendscard.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/model/chatusermodel.dart';
@@ -6,14 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class FriendsScreen extends StatefulWidget {
+  const FriendsScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<FriendsScreen> createState() => _FriendsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _FriendsScreenState extends State<FriendsScreen> {
   List<ChatUser> list = [];
   final List<ChatUser> _searchlsit = [];
   bool _isSearching = false;
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: const InputDecoration(
                           hintText: "Name,Email..", border: InputBorder.none))
                   : Text(
-                      "Gossip Fest",
+                      "Your Friends",
                       style:
                           TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
                     ),
@@ -144,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ? _searchlsit.length
                                         : list.length,
                                     itemBuilder: (context, index) {
-                                      return ChatUserCard(
+                                      return FriendCard(
                                         user: _isSearching
                                             ? _searchlsit[index]
                                             : list[index],

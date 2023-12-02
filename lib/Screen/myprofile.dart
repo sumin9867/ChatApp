@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/ProfileScreen.dart';
+
 import 'package:chat/Screen/auth/Login_screen.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/main.dart';
@@ -71,157 +72,138 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               icon: const Icon(Icons.logout),
               label: const Text('Sign Out')),
         ),
-        body: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: 20),
-                  Stack(
-                    children: [
-                      _image != null
-                          ? ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(mq.height * .3),
-                              child: Image.file(
-                                File(_image!),
-                                width: mq.height * .2,
-                                height: mq.height * .2,
-                                fit: BoxFit.cover,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                Stack(
+                  children: [
+                    _image != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(mq.height * .3),
+                            child: Image.file(
+                              File(_image!),
+                              width: mq.height * .2,
+                              height: mq.height * .2,
+                              fit: BoxFit.cover,
 
-                                // placeholder: (context, url) => CircularProgressIndicator(),
-                              ),
-                            )
-                          : ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(mq.height * .3),
-                              child: CachedNetworkImage(
-                                width: mq.height * .2,
-                                height: mq.height * .2,
-                                fit: BoxFit.cover,
-                                imageUrl: widget.user.image,
-                                // placeholder: (context, url) => CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const CircleAvatar(
-                                        child: Icon(CupertinoIcons.person)),
-                              ),
+                              // placeholder: (context, url) => CircularProgressIndicator(),
                             ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: MaterialButton(
-                          onPressed: () {
-                            _showButtomSheet();
-                          },
-                          shape: const CircleBorder(),
-                          color: Colors.white,
-                          child: const Icon(
-                            Icons.edit_rounded,
-                            color: Colors.purple,
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(mq.height * .3),
+                            child: CachedNetworkImage(
+                              width: mq.height * .2,
+                              height: mq.height * .2,
+                              fit: BoxFit.cover,
+                              imageUrl: widget.user.image,
+                              // placeholder: (context, url) => CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const CircleAvatar(
+                                      child: Icon(CupertinoIcons.person)),
+                            ),
                           ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.user.name,
+                      style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87),
+                    ),
+                    Text(
+                      widget.user.about,
+                      style:
+                          const TextStyle(fontSize: 18, color: Colors.black87),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Container(
+                        width: 178,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 37, 88, 254),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.user.name,
-                        style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87),
-                      ),
-                      Text(
-                        widget.user.about,
-                        style: const TextStyle(
-                            fontSize: 18, color: Colors.black87),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                          width: 178,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 37, 88, 254),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextButton.icon(
-                              onPressed: () {
-                                _addChatUserDialog();
-                              },
-                              icon: Icon(
-                                Icons.add,
+                        child: TextButton.icon(
+                            onPressed: () {
+                              _addChatUserDialog();
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            label: Text(
+                              'Add new Friends',
+                              style: TextStyle(
                                 color: Colors.white,
-                                size: 24,
+                                fontSize: 16,
                               ),
-                              label: Text(
-                                'Add new Friends',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ))),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                          width: 178,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 218, 216, 216),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            ProfileScreen(user: Api.me)));
-                              },
-                              icon: Icon(
-                                Icons.edit,
+                            ))),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                        width: 178,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 218, 216, 216),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          EditProfileScreen(user: Api.me)));
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                              size: 24,
+                            ),
+                            label: Text(
+                              'Edit Profile',
+                              style: TextStyle(
                                 color: Colors.black,
-                                size: 24,
+                                fontSize: 16,
                               ),
-                              label: Text(
-                                'Edit Profile',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                              ))),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 218, 216, 216),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  displayText = 'Button pressed!';
-                                });
-                              },
-                              icon: Icon(Icons.more_vert))),
-                    ],
-                  )
-                ],
-              ),
+                            ))),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 218, 216, 216),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                displayText = 'Button pressed!';
+                              });
+                            },
+                            icon: Icon(Icons.more_vert))),
+                  ],
+                )
+              ],
             ),
           ),
         ),
