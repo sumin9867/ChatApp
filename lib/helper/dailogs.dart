@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 class Dialogs {
   static void showSnackbar(BuildContext context, String msg) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(msg),
-        backgroundColor: const Color.fromARGB(255, 243, 33, 61).withOpacity(.8),
+        content: Text(
+          msg,
+          style: TextStyle(color: Colors.black),
+        ),
+        shape: CircleBorder(side: BorderSide()),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255).withOpacity(.8),
         behavior: SnackBarBehavior.floating));
   }
 
