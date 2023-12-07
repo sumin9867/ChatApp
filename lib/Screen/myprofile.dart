@@ -23,7 +23,6 @@ class MyProfileScreen extends StatefulWidget {
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
-  final _formKey = GlobalKey<FormState>();
   String? _image;
   String displayText = '';
   @override
@@ -39,36 +38,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             "Me",
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
-        ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: FloatingActionButton.extended(
-              backgroundColor: Colors.redAccent,
-              onPressed: () async {
-                //for showing progress dialog
-                Dialogs.showProgressBar(context);
-
-                await Api.updateActiveStatus(false);
-
-                //sign out from app
-                await Api.auth.signOut().then((value) async {
-                  await GoogleSignIn().signOut().then((value) {
-                    //for hiding progress dialog
-                    Navigator.pop(context);
-
-                    //for moving to home screen
-                    Navigator.pop(context);
-
-                    Api.auth = FirebaseAuth.instance;
-
-                    //replacing home screen with login screen
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) => LoginScreen()));
-                  });
-                });
-              },
-              icon: const Icon(Icons.logout),
-              label: const Text('Sign Out')),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -209,74 +178,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     );
 
     // bottom sheet
-  }
-
-  void _showButtomSheet() {
-    showModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        context: context,
-        builder: (_) {
-          return ListView(
-            shrinkWrap: true,
-            padding:
-                EdgeInsets.only(top: mq.height * .03, bottom: mq.height * .05),
-            children: [
-              const Text(
-                'Pick your DP',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(
-                height: mq.height * .02,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          fixedSize: Size(mq.width * .2, mq.height * .10)),
-                      onPressed: () async {
-                        final ImagePicker picker = ImagePicker();
-// Pick an image.
-                        final XFile? image =
-                            await picker.pickImage(source: ImageSource.gallery);
-                        if (image != null) {
-                          log('Image path:${image.path} --MineTYTpe :${image.mimeType}');
-                          setState(() {
-                            _image = image.path;
-                          });
-                          Api.updateProfilePicture(File(_image!));
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: Image.asset("images/add_image.png")),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          fixedSize: Size(mq.width * .2, mq.height * .10)),
-                      onPressed: () async {
-                        final ImagePicker picker = ImagePicker();
-// Pick an image.
-                        final XFile? image =
-                            await picker.pickImage(source: ImageSource.camera);
-                        if (image != null) {
-                          log('Image path:${image.path}');
-                          setState(() {
-                            _image = image.path;
-                          });
-                          Api.updateProfilePicture(File(_image!));
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: Image.asset("images/camera.png"))
-                ],
-              )
-            ],
-          );
-        });
   }
 
   void _addChatUserDialog() {

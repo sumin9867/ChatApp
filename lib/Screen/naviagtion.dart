@@ -29,7 +29,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         destinations: const <Widget>[
           NavigationDestination(
             icon: Badge(
-              child: Icon(Icons.messenger_sharp),
+              child: Icon(CupertinoIcons.chat_bubble),
             ),
             label: 'Messages',
           ),
@@ -44,7 +44,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         ],
       ),
       body: <Widget>[
-        HomeScreen(),
+        HomeScreen(user: Api.me),
         FriendsScreen(),
         MyProfileScreen(user: Api.me),
       ][currentPageIndex],

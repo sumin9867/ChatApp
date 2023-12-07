@@ -96,11 +96,11 @@ class _LoginScreenState extends State<LoginScreen>
                   height: mq.height * .2,
                 ),
                 AvatarGlow(
-                  endRadius: 90,
-                  duration: Duration(seconds: 2),
+                  endRadius: 120,
+                  duration: Duration(seconds: 4),
                   glowColor: Colors.white24,
                   repeat: true,
-                  repeatPauseDuration: Duration(seconds: 2),
+                  repeatPauseDuration: Duration(seconds: 1),
                   startDelay: Duration(seconds: 1),
                   child: Material(
                       elevation: 8.0,
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen>
                         child: Image(
                           image: AssetImage('images/logo.png'),
                         ),
-                        radius: 50.0,
+                        radius: 70.0,
                       )),
                 ),
                 DelayedAnimation(

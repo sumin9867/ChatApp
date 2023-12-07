@@ -1,13 +1,23 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Api/apis.dart';
+import 'package:chat/Screen/Friends/friendscard.dart';
+import 'package:chat/Screen/auth/Login_screen.dart';
+import 'package:chat/Screen/myprofile.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/helper/dailogs.dart';
+import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.user});
+  final ChatUser user;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,7 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ChatUser> list = [];
   final List<ChatUser> _searchlsit = [];
   bool _isSearching = false;
-
+  String? _image;
+  String displayText = '';
   @override
   void initState() {
     super.initState();
@@ -53,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Scaffold(
             appBar: AppBar(
-              leading: Icon(Icons.message_rounded),
               title: _isSearching
                   ? TextFormField(
                       onChanged: (val) {
@@ -75,9 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: const InputDecoration(
                           hintText: "Name,Email..", border: InputBorder.none))
                   : Text(
-                      "Gossip Fest",
+                      "Gossip",
                       style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
                     ),
               actions: [
                 IconButton(
@@ -94,6 +104,146 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
               ],
             ),
+            drawer: Drawer(
+                child: SingleChildScrollView(
+                    child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(height: mq.height * .07),
+                    Stack(
+                      children: [
+                        _image != null
+                            ? ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .3),
+                                child: Image.file(
+                                  File(_image!),
+                                  width: mq.height * 0.15,
+                                  height: mq.height * 0.15,
+                                  fit: BoxFit.cover,
+
+                                  // placeholder: (context, url) => CircularProgressIndicator(),
+                                ),
+                              )
+                            : ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(mq.height * .3),
+                                child: CachedNetworkImage(
+                                  width: mq.height * 0.15,
+                                  height: mq.height * 0.15,
+                                  fit: BoxFit.cover,
+                                  imageUrl: widget.user.image,
+                                  // placeholder: (context, url) => CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const CircleAvatar(
+                                          child: Icon(CupertinoIcons.person)),
+                                ),
+                              ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          widget.user.name,
+                          style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87),
+                        ),
+                        Text(
+                          widget.user.email,
+                          style: const TextStyle(
+                              fontSize: 18, color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: mq.height * .02,
+                    ),
+
+                    /// Header of the Drawer
+
+                    /// Header Menu items
+                    Column(
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.home_outlined),
+                          title: Text('Home'),
+                          onTap: () {
+                            /// Close Navigation drawer before
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen(
+                                        user: Api.me,
+                                      )),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.favorite_border),
+                          title: Text('Favourites'),
+                          onTap: () {
+                            /// Close Navigation drawer before
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen(
+                                        user: Api.me,
+                                      )),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.workspaces),
+                          title: Text('Workflow'),
+                          onTap: () {},
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.update),
+                          title: Text('Updates'),
+                          onTap: () {},
+                        ),
+                        const Divider(
+                          color: Colors.black45,
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.account_tree_outlined),
+                          title: Text('Plugins'),
+                          onTap: () {},
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.logout_rounded),
+                          title: Text('Logout'),
+                          onTap: () async {
+                            Dialogs.showProgressBar(context);
+                            await Api.updateActiveStatus(false);
+                            await Api.auth.signOut().then((value) async {
+                              await GoogleSignIn().signOut().then((value) {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Api.auth = FirebaseAuth.instance;
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => LoginScreen()));
+                              });
+                            });
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ))),
             floatingActionButton: FloatingActionButton(
               autofocus: true,
               shape: RoundedRectangleBorder(
@@ -108,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             body: Padding(
-              padding: const EdgeInsets.only(top: 12),
+              padding: const EdgeInsets.only(top: 5),
               child: StreamBuilder(
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
