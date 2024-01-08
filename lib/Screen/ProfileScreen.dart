@@ -62,7 +62,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                     //replacing home screen with login screen
                     Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) => const LoginScreen()));
+                        MaterialPageRoute(builder: (_) => LoginScreen()));
                   });
                 });
               },

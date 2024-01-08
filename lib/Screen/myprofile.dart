@@ -1,17 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/ProfileScreen.dart';
-import 'package:chat/Screen/auth/Login_screen.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:image_picker/image_picker.dart';
 
 class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({super.key, required this.user});

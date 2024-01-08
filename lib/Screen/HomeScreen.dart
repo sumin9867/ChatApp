@@ -1,10 +1,7 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat/Api/apis.dart';
-import 'package:chat/Screen/Friends/friendscard.dart';
 import 'package:chat/Screen/auth/Login_screen.dart';
-import 'package:chat/Screen/myprofile.dart';
 import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/main.dart';

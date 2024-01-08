@@ -4,7 +4,6 @@ import 'package:chat/Screen/chat_screen.dart';
 import 'package:chat/helper/MyDataUtil.dart';
 import 'package:chat/main.dart';
 import 'package:chat/model/chatusermodel.dart';
-import 'package:chat/model/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,6 @@ class FriendCard extends StatefulWidget {
 }
 
 class _UserCardState extends State<FriendCard> {
-  Message? _message;
   @override
   Widget build(BuildContext context) {
     return Card(

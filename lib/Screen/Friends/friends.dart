@@ -1,6 +1,5 @@
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/Friends/friendscard.dart';
-import 'package:chat/Widgets/UserCard.dart';
 import 'package:chat/helper/dailogs.dart';
 import 'package:chat/model/chatusermodel.dart';
 import 'package:flutter/cupertino.dart';

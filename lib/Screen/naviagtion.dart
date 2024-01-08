@@ -1,7 +1,9 @@
 import 'package:chat/Api/apis.dart';
 import 'package:chat/Screen/Friends/friends.dart';
 import 'package:chat/Screen/HomeScreen.dart';
+import 'package:chat/Screen/ProfileScreen.dart';
 import 'package:chat/Screen/myprofile.dart';
+import 'package:chat/Screen/view_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +48,7 @@ class _NavigationExampleState extends State<NavigationExample> {
       body: <Widget>[
         HomeScreen(user: Api.me),
         FriendsScreen(),
-        MyProfileScreen(user: Api.me),
+        EditProfileScreen(user: Api.me),
       ][currentPageIndex],
     );
   }

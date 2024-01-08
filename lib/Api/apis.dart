@@ -246,10 +246,6 @@ class Api {
     });
   }
 
-  ///************** Chat Screen Related APIs **************
-
-  // chats (collection) --> conversation_id (doc) --> messages (collection) --> message (doc)
-
   // useful for getting conversation id
   static String getConversationID(String id) => user.uid.hashCode <= id.hashCode
       ? '${user.uid}_$id'

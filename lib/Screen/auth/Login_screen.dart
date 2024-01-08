@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:chat/Api/apis.dart';
-import 'package:chat/Screen/HomeScreen.dart';
 import 'package:chat/Screen/naviagtion.dart';
 import 'package:chat/Widgets/delayed_animation.dart';
 import 'package:chat/helper/dailogs.dart';
